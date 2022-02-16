@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 public class Election implements Serializable {
@@ -16,14 +17,15 @@ public class Election implements Serializable {
     private Long id;
 
     @Column
-    @Temporal(TemporalType.DATE)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime startDate;
 
     @Column
-    @Temporal(TemporalType.DATE)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endDate;
+
+    @OneToMany(mappedBy = "election", fetch = FetchType.LAZY)
+    private List<Candidate> candidates;
 
     @Column
     String description;

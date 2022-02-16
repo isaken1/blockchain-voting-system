@@ -24,6 +24,12 @@ public class Person implements Serializable {
 
     public Person() { addProfile(Profiles.VOTER); }
 
+    public Person(String cpf, String name) {
+        this.cpf = cpf;
+        this.name = name;
+        addProfile(Profiles.VOTER);
+    }
+
     public String getName() {
         return name;
     }

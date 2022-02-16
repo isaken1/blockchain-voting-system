@@ -5,6 +5,7 @@ import br.ufrn.isaackennedy.authserver.domain.Election;
 import br.ufrn.isaackennedy.authserver.dto.CandidateDTO;
 import br.ufrn.isaackennedy.authserver.dto.ElectionDTO;
 import br.ufrn.isaackennedy.authserver.repository.CandidateRepository;
+import br.ufrn.isaackennedy.authserver.repository.ElectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +23,14 @@ public class CandidateResource {
     @Autowired
     private CandidateRepository repository;
 
+    @Autowired
+    ElectionRepository electionRepository;
+
 
     @GetMapping(value = "/{electionId}")
     public ResponseEntity<List<CandidateDTO>> findAllInElection(@PathVariable(value = "electionId") Long id) {
-        List<Candidate> candidates = repository.findAllByElection(id);
+        Election election = electionRepository.findById(id).orElseThrow();
+        List<Candidate> candidates = repository.findAllByElection(election);
         List<CandidateDTO> dtos = new ArrayList<>();
         for (Candidate candidate : candidates) {
             dtos.add(new CandidateDTO(candidate));
