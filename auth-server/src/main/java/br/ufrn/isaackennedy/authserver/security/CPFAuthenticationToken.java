@@ -12,7 +12,7 @@ public class CPFAuthenticationToken extends AbstractAuthenticationToken {
     private Object credentials;
 
     public CPFAuthenticationToken(Object principal, Object credentials) {
-        super((Collection)null);
+        super(null);
         this.principal = principal;
         this.credentials = credentials;
         this.setAuthenticated(false);

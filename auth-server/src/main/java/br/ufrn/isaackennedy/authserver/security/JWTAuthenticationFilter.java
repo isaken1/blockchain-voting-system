@@ -3,6 +3,7 @@ package br.ufrn.isaackennedy.authserver.security;
 import br.ufrn.isaackennedy.authserver.dto.CredentialsDTO;
 import br.ufrn.isaackennedy.authserver.repository.PersonRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.hash.Hashing;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -13,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -52,7 +54,8 @@ public class JWTAuthenticationFilter extends CPFAuthenticationFilter {
         String name = repository.findByCpf(cpf).getName();
         String token = util.generateToken(cpf);
         response.addHeader("Authorization", "Bearer " + token);
-        response.getWriter().write("{\"token\": \"Bearer " + token + "\", \"nome\": \""+ name +"\"}" );
+        response.getWriter().write("{\"token\": \"Bearer " + token + "\", \"nome\": \""+ name +"\", \"cpf\": \""
+                + Hashing.sha256().hashString(cpf, StandardCharsets.UTF_8) + "\"}");
     }
 
     private static class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
