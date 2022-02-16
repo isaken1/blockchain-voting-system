@@ -1,6 +1,7 @@
 package br.ufrn.isaackennedy.authserver.config;
 
 import br.ufrn.isaackennedy.authserver.repository.PersonRepository;
+import br.ufrn.isaackennedy.authserver.security.CustomAuthProvider;
 import br.ufrn.isaackennedy.authserver.security.JWTAuthenticationFilter;
 import br.ufrn.isaackennedy.authserver.security.JWTAuthorizationFilter;
 import br.ufrn.isaackennedy.authserver.security.JWTUtil;
@@ -10,6 +11,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,6 +28,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.security.AuthProvider;
 import java.util.Arrays;
 
 @Configuration
@@ -50,6 +55,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] PUBLIC_MATCHERS_POST = {
             "/voter/**"
     };
+
+    @Autowired
+    private CustomAuthProvider authProvider;
+
+    public SecurityConfig () {
+        super(false);
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -81,10 +93,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        auth.authenticationProvider(authProvider);
     }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }

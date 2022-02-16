@@ -37,7 +37,7 @@ public class JWTAuthenticationFilter extends CPFAuthenticationFilter {
         try {
             CredentialsDTO credenciais = new ObjectMapper().readValue(request.getInputStream(), CredentialsDTO.class);
             CPFAuthenticationToken authenticationToken =
-                    new CPFAuthenticationToken(credenciais.getCpf(), new ArrayList<>());
+                    new CPFAuthenticationToken(credenciais.getCpf(), credenciais.getCpf(), new ArrayList<>());
             return authenticationManager.authenticate(authenticationToken);
         } catch (IOException e) {
             throw new RuntimeException(e);

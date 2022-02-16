@@ -23,8 +23,8 @@ contract VotingSystem is Migrations {
   function insertVote(string memory _voter, uint _candidateId, uint _electionId) public restricted {
     Vote memory vote = Vote(_voter, _candidateId, _candidateId);
     votes.push(vote);
-    votesForCandidate[_candidateId]++;
-    votesInElection[_electionId]++;
+    votesForCandidate[_candidateId] = votesForCandidate[_candidateId] + 1;
+    votesInElection[_electionId] = votesInElection[_electionId] + 1;
     emit VoteInserted(vote);
   }
 }
