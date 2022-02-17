@@ -5,7 +5,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -29,6 +28,14 @@ public class Election implements Serializable {
 
     @Column
     String description;
+
+    public Election () {}
+
+    public Election(LocalDateTime startDate, LocalDateTime endDate, String description) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.description = description;
+    }
 
     public Long getId() {
         return id;

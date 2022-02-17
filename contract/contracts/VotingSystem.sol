@@ -1,8 +1,6 @@
 pragma solidity >=0.4.22 <0.9.0;
 
-import "./Migrations.sol";
-
-contract VotingSystem is Migrations {
+contract VotingSystem {
   
   struct Vote {
     string voter;
@@ -12,19 +10,33 @@ contract VotingSystem is Migrations {
 
   event VoteInserted(Vote vote);
 
-  Vote[] votes;
+  Vote[] public votes;
 
-  //Vote count for a specific candidate
-  mapping(uint => uint) public votesForCandidate;
+  // //Vote count for a specific candidate
+  // mapping(uint => uint) public numberOfVotesForCandidate;
 
-  //Total votes in a specific election
-  mapping(uint => uint) public votesInElection;
+  // //Total votes in a specific election
+  // mapping(uint => uint) public numberOfVotesInElection;
 
-  function insertVote(string memory _voter, uint _candidateId, uint _electionId) public restricted {
-    Vote memory vote = Vote(_voter, _candidateId, _candidateId);
+  function insertVote(string memory _voter, uint _candidateId, uint _electionId) public {
+    Vote memory vote = Vote(_voter, _candidateId, _electionId);
     votes.push(vote);
-    votesForCandidate[_candidateId] = votesForCandidate[_candidateId] + 1;
-    votesInElection[_electionId] = votesInElection[_electionId] + 1;
+    // numberOfVotesForCandidate[_candidateId] = numberOfVotesForCandidate[_candidateId] + 1;
+    // numberOfVotesInElection[_electionId] = numberOfVotesInElection[_electionId] + 1;
     emit VoteInserted(vote);
+  }
+
+  // function userHasVoted(string memory _voter, uint _electionId) public view returns(bool) {
+  //   uint arrayLength = votes.length;
+  //   for (uint i = 0; i < arrayLength; i++) {
+  //     if ((votes[i].electionId == _electionId) && (compareString(_voter, votes[i].voter))){
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  function compareString(string memory a, string memory b) public pure returns (bool) {
+    return (keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b)));
   }
 }

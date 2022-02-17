@@ -1,0 +1,9 @@
+
+A
+java:S2160	"+Override the "equals" method in this class.(¦¬­η
+A
+java:S1948"+Make "principal" transient or serializable.(­ΕƒΡ
+C
+java:S1948"-Make "credentials" transient or serializable.(¤χ±Β
+P
+java:S1161*":Add the "@Override" annotation above this method signature(χι­¬

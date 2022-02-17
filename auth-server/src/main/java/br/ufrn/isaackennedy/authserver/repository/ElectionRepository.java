@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface ElectionRepository extends JpaRepository<Election, Long> {
 
-    @Query(value = "SELECT e FROM Election e WHERE CURRENT_DATE BETWEEN e.startDate AND e.endDate")
+    @Query(value = "SELECT e FROM Election e WHERE CURRENT_TIMESTAMP BETWEEN e.startDate AND e.endDate")
     List<Election> findAllCurrentlyActive();
 
 }

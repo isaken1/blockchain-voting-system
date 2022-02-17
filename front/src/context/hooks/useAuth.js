@@ -3,10 +3,9 @@ import { useEffect, useState } from 'react';
 import api from '../../api';
 
 export default function useAuth() {
-  const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [voterName, setVoterName] = useState(null);
-  const [hashedCpf, setHashedCpf] = useState(null);
+  const [voterName, setVoterName] = useState(undefined);
+  const [hashedCpf, setHashedCpf] = useState(undefined);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -14,24 +13,29 @@ export default function useAuth() {
     setLoading(true);
     
     if (token) {
-      api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
-      setAuthenticated(true);
+      api.defaults.headers.Authorization = `${JSON.parse(token)}`;
     }
 
     setLoading(false);
   }, []);
 
-  async function handleLogin(inputCpf) {
-    const { data: { token, name, cpf } } = await api.post('/login', { cpf: inputCpf });
-
-    setVoterName(name);
-    setHashedCpf(cpf);
-
-    localStorage.setItem('token', JSON.stringify(token));
-    api.defaults.headers.Authorization = `Bearer ${token}`
-    setAuthenticated(true);
-    //history.pushState('/elections');
+  function isAuthenticated() {
+    return localStorage.getItem('token') !== undefined;
   }
 
-  return { authenticated, loading, handleLogin, voterName, hashedCpf };
+  async function handleLogin(inputCpf) {
+    const response = await api.post('/login', { cpf: inputCpf });
+
+    const { status } = response;
+    if (status && status === 200) { 
+      const { data: { token, name, cpf } } = response;
+      setVoterName(name);
+      setHashedCpf(cpf);
+
+      localStorage.setItem('token', JSON.stringify(token));
+      api.defaults.headers.Authorization = `${token}`;
+    }
+  }
+
+  return { isAuthenticated, loading, handleLogin, voterName, hashedCpf };
 }

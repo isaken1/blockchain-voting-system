@@ -3,7 +3,6 @@ package br.ufrn.isaackennedy.authserver.resource;
 import br.ufrn.isaackennedy.authserver.domain.Candidate;
 import br.ufrn.isaackennedy.authserver.domain.Election;
 import br.ufrn.isaackennedy.authserver.dto.CandidateDTO;
-import br.ufrn.isaackennedy.authserver.dto.ElectionDTO;
 import br.ufrn.isaackennedy.authserver.repository.CandidateRepository;
 import br.ufrn.isaackennedy.authserver.repository.ElectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;

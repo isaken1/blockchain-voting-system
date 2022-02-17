@@ -12,12 +12,19 @@ public class Candidate implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="person_id")
+    @JoinColumn(name="person_cpf")
     private Person person;
 
     @ManyToOne
     @JoinColumn(name="election_id")
     private Election election;
+
+    public Candidate() {}
+
+    public Candidate(Person person, Election election) {
+        this.person = person;
+        this.election = election;
+    }
 
     public Person getPerson() {
         return person;
